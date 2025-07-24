@@ -1,0 +1,198 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for authentication
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String?
+  role          UserRole  @default(EDITOR)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+  
+  // Relations
+  channels      Channel[]
+  learningSessions LearningSession[]
+  auditLogs     AuditLog[]
+  apiKeys       ApiKey[]
+}
+
+// API Key for external service authentication
+model ApiKey {
+  id            String    @id @default(uuid())
+  key           String    @unique
+  name          String
+  userId        String
+  lastUsedAt    DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  user          User      @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+}
+
+// Channel represents different editing styles
+model Channel {
+  id            String    @id @default(uuid())
+  name          String
+  type          ChannelType
+  description   String?
+  iconColor     String?
+  userId        String
+  isActive      Boolean   @default(true)
+  confidence    Float     @default(0.0)
+  lastTrainedAt DateTime?
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Channel-specific settings
+  settings      Json      @default("{}")
+  
+  // Relations
+  user          User      @relation(fields: [userId], references: [id])
+  editingRules  EditingRule[]
+  learningSessions LearningSession[]
+  
+  @@index([userId])
+  @@index([type])
+}
+
+// Editing rules learned for each channel
+model EditingRule {
+  id            String    @id @default(uuid())
+  channelId     String
+  ruleType      RuleType
+  parameters    Json
+  confidence    Float     @default(0.5)
+  usageCount    Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Relations
+  channel       Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  
+  @@index([channelId])
+  @@index([ruleType])
+}
+
+// Learning session tracks AI training progress
+model LearningSession {
+  id            String    @id @default(uuid())
+  channelId     String
+  userId        String
+  status        LearningStatus @default(PENDING)
+  startedAt     DateTime  @default(now())
+  completedAt   DateTime?
+  
+  // Learning data
+  sequenceData  Json
+  analysisResults Json?
+  confidence    Float?
+  errorMessage  String?
+  
+  // Metrics
+  duration      Int?      // in seconds
+  clipsAnalyzed Int?
+  patternsFound Int?
+  
+  // Relations
+  channel       Channel   @relation(fields: [channelId], references: [id])
+  user          User      @relation(fields: [userId], references: [id])
+  
+  @@index([channelId])
+  @@index([userId])
+  @@index([status])
+}
+
+// Token for multi-step deletion confirmation
+model DeletionToken {
+  id            String    @id @default(uuid())
+  token         String    @unique
+  entityType    EntityType
+  entityId      String
+  step          Int       @default(1)
+  maxSteps      Int       @default(3)
+  expiresAt     DateTime
+  usedAt        DateTime?
+  createdAt     DateTime  @default(now())
+  
+  @@index([token])
+  @@index([entityType, entityId])
+}
+
+// Audit log for security and compliance
+model AuditLog {
+  id            String    @id @default(uuid())
+  userId        String?
+  action        String
+  entityType    String
+  entityId      String?
+  metadata      Json?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime  @default(now())
+  
+  // Relations
+  user          User?     @relation(fields: [userId], references: [id])
+  
+  @@index([userId])
+  @@index([action])
+  @@index([entityType])
+  @@index([createdAt])
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum ChannelType {
+  YOUTUBE
+  INSTAGRAM
+  TIKTOK
+  PODCAST
+  CUSTOM
+}
+
+enum RuleType {
+  CUT_TIMING
+  TRANSITION_STYLE
+  COLOR_GRADING
+  AUDIO_LEVEL
+  SUBTITLE_STYLE
+  EFFECT_USAGE
+  PACE_RHYTHM
+  COMPOSITION
+}
+
+enum LearningStatus {
+  PENDING
+  ANALYZING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum EntityType {
+  CHANNEL
+  LEARNING_SESSION
+  USER
+}
