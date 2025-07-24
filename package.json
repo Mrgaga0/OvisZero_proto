@@ -17,7 +17,10 @@
     "watch": "watch-sync.bat",
     "version:patch": "node scripts/auto-version.js patch",
     "version:minor": "node scripts/auto-version.js minor",
-    "version:major": "node scripts/auto-version.js major"
+    "version:major": "node scripts/auto-version.js major",
+    "port:check": "node scripts/check-port.js",
+    "port:find": "node scripts/check-port.js find",
+    "port:status": "node scripts/check-port.js"
   },
   "dependencies": {
     "react": "^18.2.0",

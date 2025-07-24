@@ -2,7 +2,7 @@
 <ExtensionList>
     <Extension Id="com.ovistra.teamovistra">
         <HostList>
-            <Host Name="PPRO" Port="7777"/>
+            <Host Name="PPRO" Port="3200"/>
         </HostList>
     </Extension>
 </ExtensionList>
