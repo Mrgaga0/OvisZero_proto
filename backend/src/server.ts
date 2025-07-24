@@ -49,7 +49,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/health', (_, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
@@ -67,7 +67,7 @@ setupSocketHandlers(io);
 app.use(errorHandler);
 
 // 404 handler
-app.use((req, res) => {
+app.use((_, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 

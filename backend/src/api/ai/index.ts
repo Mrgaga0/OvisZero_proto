@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { aiModelsController } from './ai-models.controller';
-import { authenticateToken } from '../../middleware/auth';
+import { authenticate } from '../../middleware/auth';
 
 const router = Router();
 
@@ -12,10 +12,10 @@ router.get('/models/channel/:channelType/recommendations', aiModelsController.ge
 
 // API 키 관리 (인증 필요)
 router.get('/providers', aiModelsController.getSupportedProviders.bind(aiModelsController));
-router.post('/api-keys', authenticateToken, aiModelsController.registerAPIKey.bind(aiModelsController));
-router.get('/api-keys', authenticateToken, aiModelsController.getUserAPIKeys.bind(aiModelsController));
-router.delete('/api-keys/:keyId', authenticateToken, aiModelsController.deactivateAPIKey.bind(aiModelsController));
-router.get('/usage-statistics', authenticateToken, aiModelsController.getAPIUsageStatistics.bind(aiModelsController));
-router.post('/cost-alerts', authenticateToken, aiModelsController.setCostAlert.bind(aiModelsController));
+router.post('/api-keys', authenticate, aiModelsController.registerAPIKey.bind(aiModelsController));
+router.get('/api-keys', authenticate, aiModelsController.getUserAPIKeys.bind(aiModelsController));
+router.delete('/api-keys/:keyId', authenticate, aiModelsController.deactivateAPIKey.bind(aiModelsController));
+router.get('/usage-statistics', authenticate, aiModelsController.getAPIUsageStatistics.bind(aiModelsController));
+router.post('/cost-alerts', authenticate, aiModelsController.setCostAlert.bind(aiModelsController));
 
 export { router as aiRouter };

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { AuthRequest } from '../../middleware/auth';
 import { aiModelRegistryService } from '../../services/ai/ai-model-registry.service';
 import { apiKeyManagerService } from '../../services/ai/api-key-manager.service';
 import { logger } from '../../utils/logger';
@@ -94,7 +95,7 @@ export class AIModelsController {
   }
 
   // 모델 통계
-  async getModelStatistics(req: Request, res: Response) {
+  async getModelStatistics(_: Request, res: Response) {
     try {
       const statistics = await aiModelRegistryService.getModelStatistics();
       
@@ -112,7 +113,7 @@ export class AIModelsController {
   }
 
   // API 키 등록
-  async registerAPIKey(req: Request, res: Response) {
+  async registerAPIKey(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -158,7 +159,7 @@ export class AIModelsController {
   }
 
   // 사용자 API 키 목록
-  async getUserAPIKeys(req: Request, res: Response) {
+  async getUserAPIKeys(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -184,7 +185,7 @@ export class AIModelsController {
   }
 
   // API 키 비활성화
-  async deactivateAPIKey(req: Request, res: Response) {
+  async deactivateAPIKey(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -212,7 +213,7 @@ export class AIModelsController {
   }
 
   // API 사용량 통계
-  async getAPIUsageStatistics(req: Request, res: Response) {
+  async getAPIUsageStatistics(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id;
       if (!userId) {
@@ -244,7 +245,7 @@ export class AIModelsController {
   }
 
   // 지원되는 제공업체 목록
-  async getSupportedProviders(req: Request, res: Response) {
+  async getSupportedProviders(_: Request, res: Response) {
     try {
       const providers = apiKeyManagerService.getSupportedProviders();
       
@@ -269,7 +270,7 @@ export class AIModelsController {
   }
 
   // 비용 알림 설정
-  async setCostAlert(req: Request, res: Response) {
+  async setCostAlert(req: AuthRequest, res: Response) {
     try {
       const userId = req.user?.id;
       if (!userId) {

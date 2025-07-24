@@ -1,9 +1,5 @@
 import winston from 'winston';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Define log levels
 const levels = {
@@ -36,7 +32,7 @@ const format = winston.format.combine(
 );
 
 // Define transports
-const transports = [
+const transports: winston.transport[] = [
   // Console transport
   new winston.transports.Console({
     format: winston.format.combine(
@@ -50,12 +46,15 @@ const transports = [
 if (process.env.NODE_ENV === 'production') {
   transports.push(
     new winston.transports.File({
-      filename: path.join(__dirname, '../../logs/error.log'),
+      filename: path.join(process.cwd(), 'logs/error.log'),
       level: 'error',
       format: winston.format.uncolorize(),
-    }),
+    })
+  );
+  
+  transports.push(
     new winston.transports.File({
-      filename: path.join(__dirname, '../../logs/app.log'),
+      filename: path.join(process.cwd(), 'logs/app.log'),
       format: winston.format.uncolorize(),
     })
   );

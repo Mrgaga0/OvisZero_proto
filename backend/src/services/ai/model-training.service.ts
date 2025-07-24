@@ -288,7 +288,7 @@ function getGenreCharacteristics(genre: string): Record<string, number> {
     },
     'social-media': {
       quickPacing: 0.9,
-      attention-grabbing: 0.8,
+      'attention-grabbing': 0.8,
       viralElements: 0.7
     }
   };

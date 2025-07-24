@@ -9,7 +9,7 @@ import { aiRouter } from './ai/index';
 const router = Router();
 
 // API version
-router.get('/version', (req, res) => {
+router.get('/version', (_, res) => {
   res.json({ 
     version: '0.1.0',
     name: 'Ovistra Backend API',
