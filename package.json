@@ -14,7 +14,10 @@
     "cep:install": "node scripts/install-plugin.js",
     "cep:package": "node scripts/package-plugin.js",
     "sync": "sync-to-premiere.bat",
-    "watch": "watch-sync.bat"
+    "watch": "watch-sync.bat",
+    "version:patch": "node scripts/auto-version.js patch",
+    "version:minor": "node scripts/auto-version.js minor",
+    "version:major": "node scripts/auto-version.js major"
   },
   "dependencies": {
     "react": "^18.2.0",
