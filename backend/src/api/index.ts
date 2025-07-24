@@ -4,6 +4,7 @@ import channelRoutes from './channels/channel.routes';
 import learningRoutes from './learning/learning.routes';
 import projectRoutes from './projects/project.routes';
 import userRoutes from './users/user.routes';
+import { aiRouter } from './ai/index';
 
 const router = Router();
 
@@ -22,5 +23,6 @@ router.use('/channels', channelRoutes);
 router.use('/learning', learningRoutes);
 router.use('/projects', projectRoutes);
 router.use('/users', userRoutes);
+router.use('/ai', aiRouter);
 
 export default router;
