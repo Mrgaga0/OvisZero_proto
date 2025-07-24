@@ -1,0 +1,515 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark mode support for Tailwind v3 */
+.dark {
+  color-scheme: dark;
+}
+
+:root {
+  --font-size: 13px; /* CEP 패널에 맞게 작게 */
+  
+  /* 팀_오비스트라 다크 테마 컬러 */
+  --background: #1E1E1E;
+  --foreground: #FFFFFF;
+  --card: #252525;
+  --card-foreground: #FFFFFF;
+  --popover: #2D2D2D;
+  --popover-foreground: #FFFFFF;
+  --primary: #00FF88;
+  --primary-foreground: #1E1E1E;
+  --secondary: #2D2D2D;
+  --secondary-foreground: #FFFFFF;
+  --muted: #252525;
+  --muted-foreground: #B3B3B3;
+  --accent: #00FF88;
+  --accent-foreground: #1E1E1E;
+  --destructive: #FF3B30;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: #2D2D2D;
+  --input-background: #2D2D2D;
+  
+  /* 오비스트라 커스텀 컬러 */
+  --surface-dark: #252525;
+  --surface-elevated: #2D2D2D;
+  --accent-green: #00FF88;
+  --accent-green-hover: #00CC6F;
+  --accent-green-active: #00AA5C;
+  --text-disabled: #666666;
+  --status-warning: #FFB800;
+  --status-error: #FF3B30;
+  --status-info: #007AFF;
+  
+  --ring: rgba(0, 255, 136, 0.3);
+  --chart-1: #00FF88;
+  --chart-2: #007AFF;
+  --chart-3: #FFB800;
+  --radius: 0.375rem; /* CEP 패널에 맞게 작게 */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    outline-color: var(--ring);
+    outline-offset: 2px;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--font-size);
+    line-height: 1.4;
+  }
+  
+  html {
+    font-size: var(--font-size);
+  }
+}
+
+/* CEP 패널 최적화된 매직 버튼 */
+@layer components {
+  .magic-button {
+    @apply relative overflow-hidden rounded-lg border-none px-6 py-3 transition-all duration-300 ease-out w-full;
+    background: linear-gradient(135deg, #00FF88 0%, #00CC6F 100%);
+    color: #1E1E1E;
+    font-weight: 600;
+    font-size: 14px;
+    min-height: 48px; /* CEP 패널 터치 최소 크기 */
+    box-shadow: 
+      0 4px 20px rgba(0, 255, 136, 0.25),
+      0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .magic-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 30px rgba(0, 255, 136, 0.35),
+      0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .magic-button:active:not(:disabled) {
+    transform: translateY(0px);
+    box-shadow: 
+      0 2px 10px rgba(0, 255, 136, 0.4),
+      0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  .magic-button--disabled {
+    @apply opacity-60 cursor-not-allowed;
+    transform: none !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .magic-glow {
+    @apply absolute inset-0 opacity-0 transition-opacity duration-300;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    border-radius: inherit;
+  }
+
+  /* 토글 컨트롤 버튼 */
+  .toggle-control {
+    @apply flex items-center gap-2 px-3 py-1 bg-adobe-elevated hover:bg-adobe-panel rounded-full text-xs transition-colors;
+  }
+  
+  .toggle-control--active {
+    @apply text-accent-green;
+  }
+  
+  .toggle-control--inactive {
+    @apply text-muted-foreground hover:text-foreground;
+  }
+
+  /* 전체 토글 버튼 */
+  .master-toggle {
+    @apply flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200;
+    @apply bg-surface-elevated bg-opacity-50 hover:bg-surface-elevated;
+    @apply text-muted-foreground hover:text-foreground;
+    @apply border border-transparent hover:border-border;
+  }
+  
+  .master-toggle--expanded {
+    @apply bg-accent-green bg-opacity-10 text-accent-green border-accent-green border-opacity-30;
+  }
+
+  /* 섹션별 토글 아이콘 */
+  .section-toggle {
+    @apply w-4 h-4 p-0.5 rounded-full transition-colors cursor-pointer;
+    @apply text-muted-foreground hover:text-foreground;
+    @apply hover:bg-surface-elevated;
+  }
+  
+  .section-toggle--active {
+    @apply text-accent-green bg-accent-green bg-opacity-10;
+  }
+
+  /* 프로젝트 정보 카드 */
+  .project-info-card {
+    @apply bg-surface-elevated border border-border rounded-lg p-4 space-y-3;
+  }
+  
+  .project-header {
+    @apply flex items-start gap-2;
+  }
+  
+  .project-title {
+    @apply font-semibold text-sm truncate min-w-0 flex-1;
+  }
+  
+  .project-path {
+    @apply text-xs text-muted-foreground truncate;
+  }
+  
+  .channel-info {
+    @apply flex items-center justify-between;
+  }
+  
+  .auto-detected-badge {
+    @apply text-xs bg-accent-green bg-opacity-20 text-accent-green px-2 py-0.5 rounded;
+  }
+  
+  .change-button {
+    @apply text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1;
+  }
+
+  /* 상태 표시 개선 */
+  .status-grid {
+    @apply space-y-2;
+  }
+  
+  .status-item {
+    @apply flex items-center justify-center gap-2;
+  }
+  
+  .status-item--ready {
+    @apply text-accent-green;
+  }
+  
+  .status-item--warning {
+    @apply text-status-warning;
+  }
+  
+  .status-summary {
+    @apply p-3 rounded-lg;
+  }
+  
+  .status-summary--ready {
+    @apply bg-accent-green bg-opacity-10;
+  }
+  
+  .status-summary--warning {
+    @apply bg-status-warning bg-opacity-10;
+  }
+
+  /* 컴팩트 프로그레스 바 */
+  .progress-bar {
+    @apply w-full bg-surface-elevated rounded-full h-2 overflow-hidden;
+  }
+  
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-accent-green to-accent-green-hover transition-all duration-300;
+    background-size: 20px 20px;
+    background-image: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 10px,
+      rgba(255, 255, 255, 0.1) 10px,
+      rgba(255, 255, 255, 0.1) 20px
+    );
+    animation: progress-animation 2s linear infinite;
+  }
+  
+  @keyframes progress-animation {
+    0% { background-position: 0 0; }
+    100% { background-position: 20px 0; }
+  }
+
+  /* 초기 설정 스타일 */
+  .setup-progress-step {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors;
+  }
+  
+  .setup-progress-step--completed {
+    @apply bg-accent-green text-background;
+  }
+  
+  .setup-progress-step--current {
+    @apply bg-accent-green bg-opacity-20 text-accent-green border-2 border-accent-green;
+  }
+  
+  .setup-progress-step--pending {
+    @apply bg-surface-elevated text-muted-foreground;
+  }
+  
+  .setup-progress-line {
+    @apply flex-1 h-0.5 mx-2 transition-colors;
+  }
+  
+  .setup-progress-line--completed {
+    @apply bg-accent-green;
+  }
+  
+  .setup-progress-line--pending {
+    @apply bg-surface-elevated;
+  }
+
+  .setup-card {
+    @apply bg-surface-elevated rounded-lg p-6;
+  }
+  
+  .channel-card {
+    @apply p-3 rounded-lg border transition-colors;
+  }
+  
+  .channel-card--active {
+    @apply border-accent-green bg-accent-green bg-opacity-10;
+  }
+  
+  .channel-card--inactive {
+    @apply border-border bg-surface-dark;
+  }
+
+  /* 팁 카드 */
+  .tip-card {
+    @apply text-center p-3 bg-chart-2 bg-opacity-10 rounded-lg;
+  }
+  
+  .tip-text {
+    @apply text-xs text-chart-2;
+  }
+
+  /* 모달 오버레이 */
+  .modal-overlay {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  }
+  
+  .modal-content {
+    @apply bg-surface-elevated p-4 rounded-lg max-w-xs w-full m-4;
+  }
+
+  /* 애니메이션이 적용된 토글 가능 섹션 */
+  .collapsible-section {
+    @apply overflow-hidden transition-all duration-300;
+  }
+  
+  .collapsible-section--collapsed {
+    @apply max-h-0 opacity-0;
+  }
+  
+  .collapsible-section--expanded {
+    @apply max-h-screen opacity-100;
+  }
+
+  /* CEP 패널용 폼 요소 */
+  select, input {
+    @apply bg-surface-elevated border border-border rounded px-2 py-1 text-xs;
+    @apply focus:outline-none focus:ring-1 focus:ring-accent-green/50 focus:border-accent-green;
+    font-size: 12px;
+    min-height: 28px;
+  }
+  
+  details {
+    @apply transition-all duration-200;
+  }
+  
+  details[open] {
+    @apply space-y-2;
+  }
+  
+  summary {
+    @apply list-none cursor-pointer select-none transition-colors;
+  }
+  
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  
+  summary::before {
+    content: "▼";
+    font-size: 10px;
+    margin-right: 4px;
+    transition: transform 0.2s;
+  }
+  
+  details[open] summary::before {
+    transform: rotate(180deg);
+  }
+
+  /* 컴팩트 애니메이션 */
+  .fade-in-fast {
+    animation: fadeInFast 0.2s ease-out;
+  }
+  
+  .slide-up-fast {
+    animation: slideUpFast 0.3s ease-out;
+  }
+  
+  .slide-down-fast {
+    animation: slideDownFast 0.3s ease-out;
+  }
+  
+  @keyframes fadeInFast {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUpFast {
+    from { 
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideDownFast {
+    from { 
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 미니멀 모드용 컴팩트 버튼 */
+  .compact-toggle {
+    @apply w-6 h-6 flex items-center justify-center rounded-full;
+    @apply text-muted-foreground text-opacity-60 hover:text-muted-foreground hover:text-opacity-100 transition-colors;
+    @apply hover:bg-surface-elevated hover:bg-opacity-50;
+  }
+}
+
+/**
+ * CEP 패널 최적화 타이포그래피
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    p {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.4;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    button {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+  }
+}
+
+/* CEP 패널용 유틸리티 */
+.cep-container {
+  max-width: 320px; /* 약간 더 넓게 */
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.text-gradient-green {
+  background: linear-gradient(135deg, #00FF88 0%, #00CC6F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* CEP 패널 스크롤바 (더 얇게) */
+.cep-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cep-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cep-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.cep-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 스크린 크기별 반응형 조정 */
+@media (max-width: 380px) {
+  .cep-container {
+    max-width: 100%;
+    padding: 12px;
+  }
+  
+  .magic-button {
+    min-height: 44px;
+    font-size: 13px;
+  }
+}
+
+@media (min-width: 400px) {
+  .cep-container {
+    max-width: 360px;
+  }
+}
+
+/* 토글 상태 전환 애니메이션 최적화 */
+@media (prefers-reduced-motion: no-preference) {
+  .collapsible-section {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .master-toggle {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .section-toggle {
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* 접근성 개선 */
+@media (prefers-reduced-motion: reduce) {
+  .collapsible-section,
+  .master-toggle,
+  .section-toggle {
+    transition: none;
+  }
+  
+  .fade-in-fast,
+  .slide-up-fast,
+  .slide-down-fast {
+    animation: none;
+  }
+}

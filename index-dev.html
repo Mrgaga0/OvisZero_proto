@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Ovistra - Development</title>
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #1E1E1E;
+            color: #FFFFFF;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+        }
+        
+        #root {
+            width: 100%;
+            height: 100vh;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <!-- Mock CEP Bridge for development -->
+    <script>
+        // Mock CEP environment for development
+        window.CEPBridge = {
+            getActiveSequence: async () => {
+                return {
+                    name: "Development Sequence",
+                    duration: 120.5,
+                    frameRate: 29.97,
+                    width: 1920,
+                    height: 1080,
+                    videoTracks: 3,
+                    audioTracks: 4,
+                    clipCount: 25,
+                    markers: []
+                };
+            },
+            
+            getProjects: async () => {
+                return [{
+                    name: "Development Project",
+                    path: "/dev/project.prproj",
+                    sequences: [
+                        {
+                            name: "Main Sequence",
+                            duration: 3600,
+                            frameRate: 29.97,
+                            videoTracks: 3,
+                            audioTracks: 4
+                        }
+                    ]
+                }];
+            },
+            
+            applyAIEditing: async (channelType) => {
+                return {
+                    success: true,
+                    message: `Development: AI editing applied for ${channelType}`,
+                    sequenceName: "Development Sequence"
+                };
+            }
+        };
+    </script>
+    
+    <script type="module" src="/main.tsx"></script>
+</body>
+</html>
